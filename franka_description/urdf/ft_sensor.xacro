@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ft_sensor">
+  <!-- safety_distance: Minimum safety distance in [m] by which the collision volumes are expanded
+  and which is enforced during robot motions -->
+  <xacro:macro name="ft_sensor"
+    params="connected_to:='' description_pkg:='franka_description' ns:='' rpy:='0 0 0' xyz:='0 0 0' safety_distance:=0">
+
+    <link name="${ns}_ft_sensor_link">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.02" radius="0.04" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.02" radius="0.04" />
+        </geometry>
+      </visual>
+
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="4.33e-5" ixy="0" ixz="0" iyy="4.33e-5" iyz="0" izz="8e-5" />
+      </inertial>
+    </link>
+    <xacro:unless value="${connected_to == ''}">
+      <!-- Must be set as "revolute" to get the sensor topic -->
+      <joint name="${ns}_sensor_joint" type="revolute">
+        <parent link="${connected_to}" />
+        <child link="${ns}_ft_sensor_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
+        <limit
+          lower="0.0"
+          upper="0.0"
+          effort="0.0"
+          velocity="0.0" />
+      </joint>
+    </xacro:unless>
+
+    <link name="${ns}_tool">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.08" radius="0.01" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.08" radius="0.01" />
+        </geometry>
+      </visual>
+
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="5.58e-5" ixy="0" ixz="0" iyy="5.58e-5" iyz="0" izz="5e-6" />
+      </inertial>
+    </link>
+
+    <joint name="tool_joint" type="fixed">
+      <parent link="${ns}_ft_sensor_link" />
+      <child link="${ns}_tool" />
+      <origin xyz="0 0 0.05" rpy="0 0 0" />
+    </joint>
+
+    <link name="${ns}_tool_ball">
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="0.02" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="0.02" />
+        </geometry>
+      </visual>
+
+      <inertial>
+        <mass value="0.01" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="1.6e-5" ixy="0" ixz="0" iyy="1.6e-5" iyz="0" izz="1.6e-5" />
+      </inertial>
+    </link>
+
+    <joint name="tool_ball_joint" type="fixed">
+      <parent link="${ns}_tool" />
+      <child link="${ns}_tool_ball" />
+      <origin xyz="0 0 0.04" rpy="0 0 0" />
+    </joint>
+  </xacro:macro>
+</robot> 

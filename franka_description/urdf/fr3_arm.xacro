@@ -1,0 +1,277 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="fr3">
+  <!-- safety_distance: Minimum safety distance in [m] by which the collision volumes are expanded
+  and which is enforced during robot motions -->
+  <!-- arm_id: Namespace of the fr3 arm. Serves to differentiate between arms in case of multiple
+  instances. -->
+  <!-- Load inertial properties. Property is implicitly passed to macros. -->
+  <xacro:property name="inertial_config"
+    value="$(find franka_description)/urdf/common/inertial.yaml" />
+  <xacro:property name="inertial" value="${xacro.load_yaml(inertial_config)}" />
+
+  <!-- ============================================================== -->
+  <!-- Macro to add an <inertial> tag based on yaml-load properties   -->
+  <!--                                                                -->
+  <!-- name:     Name of the robot link (without prefix)              -->
+  <!-- inertial: Dictionary of inertia properties (see inertial.yaml) -->
+  <!-- ============================================================== -->
+  <xacro:macro name="inertial_props" params="name inertial:=^">
+    <xacro:unless value="${name in inertial}">${xacro.warning('No inertia properties defined for: '
+      + name)}</xacro:unless>
+    <xacro:if value="${name in inertial}">
+      <!-- Access inertia properties of link 'name' -->
+      <xacro:property name="inertial" value="${inertial[name]}" lazy_eval="false" />
+      <inertial>
+        <origin rpy="${inertial.origin.rpy}" xyz="${inertial.origin.xyz}" />
+        <mass value="${inertial.mass}" />
+        <xacro:property name="I" value="${inertial.inertia}" />
+        <inertia ixx="${I.xx}" ixy="${I.xy}" ixz="${I.xz}" iyy="${I.yy}" iyz="${I.yz}" izz="${I.zz}" />
+      </inertial>
+    </xacro:if>
+  </xacro:macro>
+
+  <xacro:macro name="fr3_arm"
+    params="arm_id:='fr3' sim_ignition:='false' description_pkg:='franka_description' connected_to:='' xyz:='0 0 0' rpy:='0 0 0' safety_distance:=0">
+    <xacro:unless value="${not connected_to}">
+      <joint name="${arm_id}_joint_${connected_to}" type="fixed">
+        <parent link="${connected_to}" />
+        <child link="${arm_id}_link0" />
+        <origin rpy="${rpy}" xyz="${xyz}" />
+      </joint>
+    </xacro:unless>
+
+    <link name="${arm_id}_link0">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link0.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link0.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${arm_id}_link1">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link1.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link1.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link1" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint1" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973"
+        soft_upper_limit="2.8973" />
+      <origin rpy="0 0 0" xyz="0 0 0.333" />
+      <parent link="${arm_id}_link0" />
+      <child link="${arm_id}_link1" />
+      <axis xyz="0 0 1" />
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link2">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link2.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link2.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link2" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint2" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-1.7628"
+        soft_upper_limit="1.7628" />
+      <origin rpy="${-pi/2} 0 0" xyz="0 0 0" />
+      <parent link="${arm_id}_link1" />
+      <child link="${arm_id}_link2" />
+      <axis xyz="0 0 1" />
+      <limit effort="87" lower="-1.7628" upper="1.7628" velocity="2.1750" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link3">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link3.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link3.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link3" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint3" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973"
+        soft_upper_limit="2.8973" />
+      <origin rpy="${pi/2} 0 0" xyz="0 -0.316 0" />
+      <parent link="${arm_id}_link2" />
+      <child link="${arm_id}_link3" />
+      <axis xyz="0 0 1" />
+      <limit effort="87" lower="-2.8973" upper="2.8973" velocity="2.1750" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link4">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link4.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link4.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link4" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint4" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-3.0718"
+        soft_upper_limit="-0.0698" />
+      <origin rpy="${pi/2} 0 0" xyz="0.0825 0 0" />
+      <parent link="${arm_id}_link3" />
+      <child link="${arm_id}_link4" />
+      <axis xyz="0 0 1" />
+      <limit effort="87" lower="-3.0718" upper="-0.0698" velocity="2.1750" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link5">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link5.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link5.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link5" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint5" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973"
+        soft_upper_limit="2.8973" />
+      <origin rpy="${-pi/2} 0 0" xyz="-0.0825 0.384 0" />
+      <parent link="${arm_id}_link4" />
+      <child link="${arm_id}_link5" />
+      <axis xyz="0 0 1" />
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link6">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link6.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link6.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link6" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint6" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-0.0175"
+        soft_upper_limit="3.7525" />
+      <origin rpy="${pi/2} 0 0" xyz="0 0 0" />
+      <parent link="${arm_id}_link5" />
+      <child link="${arm_id}_link6" />
+      <axis xyz="0 0 1" />
+      <limit effort="12" lower="-0.0175" upper="3.7525" velocity="2.6100" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link7">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/link7.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/collision/link7.stl" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link7" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint7" type="revolute">
+      <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973"
+        soft_upper_limit="2.8973" />
+      <origin rpy="${pi/2} 0 0" xyz="0.088 0 0" />
+      <parent link="${arm_id}_link6" />
+      <child link="${arm_id}_link7" />
+      <axis xyz="0 0 1" />
+      <limit effort="12" lower="-2.8973" upper="2.8973" velocity="2.6100" />
+      <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16" />
+    </joint>
+
+    <link name="${arm_id}_link8">
+      <collision>
+        <origin xyz="0.0424 0.0424 -0.0250" rpy="${pi} ${pi/2} ${pi/2}" />
+        <geometry>
+          <cylinder radius="${0.03+safety_distance}" length="0.01" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0.0424 0.0424 -0.02" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.03+safety_distance}" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0.0424 0.0424 -0.03" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.03+safety_distance}" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="link8" />
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_joint8" type="fixed">
+      <origin rpy="0 0 0" xyz="0 0 0.107" />
+      <parent link="${arm_id}_link7" />
+      <child link="${arm_id}_link8" />
+      <limit effort="0" velocity="0" lower="0" upper="0" />
+    </joint>
+
+  </xacro:macro>
+</robot>

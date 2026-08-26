@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hand">
+
+  <xacro:property name="inertial_config"
+    value="$(find franka_description)/urdf/common/inertial.yaml" />
+  <xacro:property name="inertial" value="${xacro.load_yaml(inertial_config)}" />
+  <!-- ============================================================== -->
+  <!-- Macro to add an <inertial> tag based on yaml-load properties   -->
+  <!--                                                                -->
+  <!-- name:     Name of the robot link (without prefix)              -->
+  <!-- inertial: Dictionary of inertia properties (see inertial.yaml) -->
+  <!-- ============================================================== -->
+  <xacro:macro name="inertial_props" params="name inertial:=^">
+    <xacro:unless value="${name in inertial}">${xacro.warning('No inertia properties defined for: '
+      + name)}</xacro:unless>
+    <xacro:if value="${name in inertial}">
+      <!-- Access inertia properties of link 'name' -->
+      <xacro:property name="inertial" value="${inertial[name]}" lazy_eval="false" />
+      <inertial>
+        <origin rpy="${inertial.origin.rpy}" xyz="${inertial.origin.xyz}" />
+        <mass value="${inertial.mass}" />
+        <xacro:property name="I" value="${inertial.inertia}" />
+        <inertia ixx="${I.xx}" ixy="${I.xy}" ixz="${I.xz}" iyy="${I.yy}" iyz="${I.yz}" izz="${I.zz}" />
+      </inertial>
+    </xacro:if>
+  </xacro:macro>
+
+  <!-- safety_distance: Minimum safety distance in [m] by which the collision volumes are expanded
+  and which is enforced during robot motions -->
+  <xacro:macro name="hand"
+    params="sim_ignition:='false' connected_to:='' description_pkg:='franka_description' ns:='' rpy:='0 0 0' xyz:='0 0 0' safety_distance:=0">
+    <xacro:unless value="${connected_to == ''}">
+      <joint name="${ns}_hand_joint" type="fixed">
+        <parent link="${connected_to}" />
+        <child link="${ns}_hand" />
+        <origin xyz="${xyz}" rpy="${rpy}" />
+      </joint>
+    </xacro:unless>
+    <link name="${ns}_hand">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/hand.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.04" rpy="0 ${pi/2} ${pi/2}" />
+        <geometry>
+          <cylinder radius="${0.04+safety_distance}" length="0.1" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 -0.05 0.04" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.04+safety_distance}" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 0.05 0.04" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.04+safety_distance}" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 0 0.1" rpy="0 ${pi/2} ${pi/2}" />
+        <geometry>
+          <cylinder radius="${0.02+safety_distance}" length="0.1" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 -0.05 0.1" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.02+safety_distance}" />
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 0.05 0.1" rpy="0 0 0" />
+        <geometry>
+          <sphere radius="${0.02+safety_distance}" />
+        </geometry>
+      </collision>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="hand" />
+      </xacro:if>
+    </link>
+    <!-- Define the hand_tcp frame -->
+    <link name="${ns}_hand_tcp" />
+    <joint name="${ns}_hand_tcp_joint" type="fixed">
+      <origin xyz="0 0 0.1034" rpy="0 0 0" />
+      <parent link="${ns}_hand" />
+      <child link="${ns}_hand_tcp" />
+    </joint>
+    <link name="${ns}_leftfinger">
+      <visual>
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/finger.dae" />
+        </geometry>
+      </visual>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="leftfinger" />
+      </xacro:if>
+    </link>
+    <link name="${ns}_rightfinger">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <geometry>
+          <mesh filename="file://$(find ${description_pkg})/meshes/visual/finger.dae" />
+        </geometry>
+      </visual>
+      <xacro:if value="${sim_ignition}">
+        <xacro:inertial_props name="rightfinger" />
+      </xacro:if>
+    </link>
+    <joint name="${ns}_finger_joint1" type="prismatic">
+      <parent link="${ns}_hand" />
+      <child link="${ns}_leftfinger" />
+      <origin xyz="0 0 0.0584" rpy="0 0 0" />
+      <axis xyz="0 1 0" />
+      <limit effort="20" lower="0.0" upper="0.04" velocity="0.2" />
+    </joint>
+    <joint name="${ns}_finger_joint2" type="prismatic">
+      <parent link="${ns}_hand" />
+      <child link="${ns}_rightfinger" />
+      <origin xyz="0 0 0.0584" rpy="0 0 0" />
+      <axis xyz="0 -1 0" />
+      <limit effort="20" lower="0.0" upper="0.04" velocity="0.2" />
+      <mimic joint="${ns}_finger_joint1" multiplier="1" />
+    </joint>
+  </xacro:macro>
+</robot>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ex2</name>
+  <version>0.0.0</version>
+  <description>Template for exercise 2: Gazebo + Rviz + MoveIt</description>
+  <maintainer email="juuso.s.jarvenpaa@tuni.fi">Juuso Järvenpää</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>controller_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>urdf</depend>
+
+  <depend>eigen3_cmake_module</depend>
+  <depend>orocos_kdl_vendor</depend>
+  <depend>kdl_parser</depend>
+
+  <depend>ros_gz</depend>
+  <depend>gazebo_ros</depend>
+  <depend>franka_description</depend>
+  <depend>gazebo_ros2_control</depend>
+
+  <depend>std_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <depend>control_msgs</depend>
+
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+
+  <depend>effort_controllers</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
