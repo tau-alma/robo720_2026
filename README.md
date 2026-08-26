@@ -50,7 +50,7 @@ To acquire the exercise code, first clone the repository to a desired directory 
 cd ~/
 mkdir desired_directory_name/
 cd desired_directory_name/
-git clone {link to repo here}
+git clone https://github.com/tau-alma/robo720_2026.git
 ```
 
 This will clone the course repository as a subdirectory in the desired directory.
@@ -100,13 +100,13 @@ Next, install also 'WSL' extension to your VS Code. To do this, type 'WSL' in **
 
 ![WSL extension](images/wsl_extension.png)
 
-## Nvidia prerequisites
+### Nvidia prerequisites
 
 If you do not have Nvidia GPU on your machine, you can skip this part.
 
 It is sufficient that you have Nvidia drivers installed on your machine. It is possible that hardware rendering of Gazebo does not work with older drivers. In this case you can try to upgrade your driver version.
 
-## Cloning the repository
+### Cloning the repository
 
 To run the exercise codes, first clone the repository to a desired directory in WSL terminal. Do not clone into the default directory `/mnt/c/...`, but instead to a desired directory inside home directory (`~/`):
 
@@ -114,12 +114,10 @@ To run the exercise codes, first clone the repository to a desired directory in 
 cd ~/
 mkdir desired_directory_name/
 cd desired_directory_name/
-git clone {link to repo here}
+git clone https://github.com/tau-alma/robo720_2026.git
 ```
 
-## Running the container
-
-### Option 1: Run in VS Code (recommended)
+### Running the container
 
 Next, open VS Code in `robo720_2026` directory. You can do this from WSL Ubuntu terminal with:
 
@@ -136,29 +134,6 @@ If your machine has an Nvidia GPU, choose `advanced_robotics_devcontainer_wsl_nv
 
 After that, VS Code will open in the Docker container. The first build might take 5-10 minutes. If a terminal does not open automatically after building, you can open one from the toolbar on top of the window by pressing 'Terminal', and then 'New terminal'. This opens a bash shell which is identical by its functionalities to a default terminal on Ubuntu machines.
 
-### Option 2: Run in terminal
-
-First build the container:
-
-```bash
-docker compose build
-```
-
-Next, run the container and start a shell session inside the container:
-
-```bash
-# Run the container in detached-mode
-docker compose up -d
-# Open a shell in it
-docker compose exec advanced_robotics bash
-```
-
-To exit the shell session in container, press **Ctrl+D**. After exiting the shell session, you can run the container down:
-
-```bash
-docker compose down
-```
-
 ## Workflow
 
-The idea is that you code your exercises in VS Code which is inside the container, so all the required packages are installed there.
+The idea is that you code your exercises in VS Code which is inside the container, so all the required packages are installed there. Then you can run the code in the VS Code terminal, like you would in Ubuntu terminal.
