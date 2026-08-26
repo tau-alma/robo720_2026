@@ -1,0 +1,26 @@
+{
+  "name": "advanced_robotics_devcontainer_wsl",
+  "dockerComposeFile": "docker-compose.wsl.yml",
+  "service": "advanced_robotics",
+  "workspaceFolder": "/home/student/ros2_ws/",
+  "remoteUser": "student",
+  "containerUser": "student",
+  "containerEnv": {
+    "SHELL": "/bin/bash",
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "WAYLAND_DISPLAY": "${localEnv:WAYLAND_DISPLAY}",
+    "XDG_RUNTIME_DIR": "${localEnv:XDG_RUNTIME_DIR}",
+    "PULSE_SERVER": "${localEnv:PULSE_SERVER}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "redhat.vscode-xml",
+        "Ranch-Hand-Robotics.rde-ros-2"
+      ]
+    }
+  }
+}

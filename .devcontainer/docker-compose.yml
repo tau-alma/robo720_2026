@@ -1,0 +1,25 @@
+services:
+  advanced_robotics:
+    build: .
+    image: advanced_robotics:humble
+    container_name: advanced_robotics
+    stdin_open: true
+    tty: true
+    network_mode: host
+    group_add:
+      - audio
+    devices:
+      - /dev/snd
+      - /dev/dri:/dev/dri
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+      - IGN_IP=127.0.0.1  # important for Gazebo to work correctly
+    volumes:
+      # Mount the student's workspace
+      - ../:/home/student/ros2_ws/src/robo720_2026/
+      # X11 for GUI (RViz, Gazebo)
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XDG_RUNTIME_DIR}/pulse:${XDG_RUNTIME_DIR}/pulse
+      - ~/.config/pulse/cookie:/home/student/.config/pulse/cookie

@@ -1,0 +1,27 @@
+services:
+  advanced_robotics:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: advanced_robotics:humble
+    container_name: advanced_robotics
+    stdin_open: true
+    tty: true
+    network_mode: host
+    group_add:
+      - audio
+    devices:
+      - /dev/dxg
+    environment:
+      - DISPLAY=${DISPLAY}
+      - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+      - PULSE_SERVER=${PULSE_SERVER}
+      - QT_X11_NO_MITSHM=1
+      - IGN_IP=127.0.0.1
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib:${LD_LIBRARY_PATH}
+    volumes:
+      - ../../:/home/student/ros2_ws/src/robo720_2026/
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /mnt/wslg:/mnt/wslg
+      - /usr/lib/wsl:/usr/lib/wsl

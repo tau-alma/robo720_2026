@@ -1,0 +1,26 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+  "name": "advanced_robotics_devcontainer",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "advanced_robotics",
+  "workspaceFolder": "/home/student/ros2_ws/",
+  "remoteUser": "student",
+  "containerUser": "student",
+  "containerEnv": {
+    "SHELL": "/bin/bash",
+    "DISPLAY": "${localEnv:DISPLAY}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "redhat.vscode-xml",
+        "Ranch-Hand-Robotics.rde-ros-2"
+      ]
+    }
+  }
+}
+ 
