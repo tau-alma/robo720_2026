@@ -1,6 +1,6 @@
 # ROBO.720 Exercises
 
-This repository includes the exercises for ROBO.720 Advanced Robotics course autumn 2026 implementation. Below are instructions for making the exercises work with Ubuntu and Windows in Docker container environment. Follow the one based on which OS you are using.
+This repository includes the exercises for ROBO.720 Advanced Robotics course autumn 2026 implementation. Below are instructions for making the exercises work with Ubuntu, Windows and Mac in Docker container environment. Follow the one based on which OS you are using.
 
 ## 1. Ubuntu
 
@@ -57,6 +57,8 @@ This will clone the course repository as a subdirectory in the desired directory
 
 ### Running the container
 
+### Option 1: VS Code (recommended)
+
 To run the container in VS Code, open VS Code in the repository directory:
 
 ```bash
@@ -71,6 +73,39 @@ Once in VS Code, open Command Palette by pressing **Ctrl+Shift+P**, and type in 
 If your machine has an Nvidia GPU, choose `advanced_robotics_devcontainer_nvidia`, otherwise choose `advanced_robotics_devcontainer`.
 
 After that, VS Code will open in the Docker container. The first build might take 5-10 minutes. If a terminal does not open automatically after building, you can open one from the toolbar on top of the window by pressing 'Terminal', and then 'New terminal'. This opens a bash shell which is identical by its functionalities to a default terminal on Ubuntu machines.
+
+### Option 2: Terminal
+
+First build the container image:
+
+```bash
+cd ~/desired_directory_name/robo720_2026/.devcontainer
+docker compose build
+```
+
+Next, run the container and start a shell session inside the container. This version is for machines without Nvidia GPU:
+
+```bash
+# Run the container in detached-mode
+docker compose up -d
+# Open a shell in it
+docker compose exec advanced_robotics bash
+```
+
+And this is for machines with Nvidia GPU:
+
+```bash
+# Run the container in detached-mode
+docker compose -f docker-compose.yml -f docker-compose.nvidia.yml up -d
+# Open a shell in it
+docker compose -f docker-compose.yml -f docker-compose.nvidia.yml exec advanced_robotics bash
+```
+
+To exit the shell session in container, press **Ctrl+D**. After exiting the shell session, you can run the container down:
+
+```bash
+docker compose down
+```
 
 ## 2. Windows
 
@@ -119,20 +154,61 @@ git clone https://github.com/tau-alma/robo720_2026.git
 
 ### Running the container
 
+### Option 1: VS Code (recommended)
+
 Next, open VS Code in `robo720_2026` directory. You can do this from WSL Ubuntu terminal with:
 
 ```bash
-cd ~/path/to/robo720_2026
+cd ~/desired_directory_name/robo720_2026
 code .
 ```
 
-Then, open Command Palette by pressing **Ctrl+Shift+P**, and type in 'Dev Containers: Rebuild and Reopen in Container'. This should prompt you with the following pop-up:
+Once in VS Code, open Command Palette by pressing **Ctrl+Shift+P**, and type in 'Dev Containers: Rebuild and Reopen in Container'. This should prompt you with the following pop-up:
 
 ![Image showing the dev container pop-up](images/dev_container_popup.png)
 
 If your machine has an Nvidia GPU, choose `advanced_robotics_devcontainer_wsl_nvidia`, otherwise choose `advanced_robotics_devcontainer_wsl`.
 
 After that, VS Code will open in the Docker container. The first build might take 5-10 minutes. If a terminal does not open automatically after building, you can open one from the toolbar on top of the window by pressing 'Terminal', and then 'New terminal'. This opens a bash shell which is identical by its functionalities to a default terminal on Ubuntu machines.
+
+### Option 2: Terminal
+
+First build the container image in WSL Ubuntu terminal:
+
+```bash
+cd ~/desired_directory_name/.devcontainer
+docker compose build
+```
+
+Next, run the container and start a shell session inside the container. This version is for machines without Nvidia GPU:
+
+```bash
+cd wsl
+# Run the container in detached-mode
+docker compose -f docker-compose.wsl.yml up -d
+# Open a shell in it
+docker compose -f docker-compose.wsl.yml exec advanced_robotics bash
+```
+
+And this is for machines with Nvidia GPU:
+
+```bash
+cd wsl
+# Run the container in detached-mode
+docker compose -f docker-compose.wsl.yml -f docker-compose.wsl.nvidia.yml up -d
+# Open a shell in it
+docker compose -f docker-compose.wsl.yml -f docker-compose.wsl.nvidia.yml exec advanced_robotics bash
+```
+
+To exit the shell session in container, press **Ctrl+D**. After exiting the shell session, you can run the container down:
+
+```bash
+docker compose -f docker-compose.wsl.yml down
+```
+
+## 3. Mac / If above methods fail
+
+We have also pre-built the Docker image used during the course. If you are unsuccessful in building the image with above instructions, or you are a Mac user, you can follow [these instructions](https://hub.docker.com/r/cogrobot/robo720).
 
 ## Workflow
 
