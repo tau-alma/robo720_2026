@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="fr3">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml"/>
+    <xacro:arg name="arm_id" default="fr3" />
+    <xacro:arg name="sim_ignition" default="true" />
+    <xacro:arg name="use_fake_hardware" default="false" />
+    <xacro:arg name="simulation_controllers"
+    default="" />
+    <link name="world">
+    </link>
+    <joint name="world_base" type="fixed">
+        <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+        <parent link="world" />
+        <child link="base" />
+    </joint>
+    <!-- box shaped table as base -->
+    <link name="base">
+        <visual>
+            <origin xyz="0 0 0.5" rpy="0 0 0" />
+            <geometry>
+                <box size="0.5 0.5 1" />
+            </geometry>
+            <material name="metal">
+                <color rgba="0.768627450980392 0.749019607843137 0.729411764705882 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.5" rpy="0 0 0" />
+            <geometry>
+                <box size="0.5 0.5 1" />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="10" />
+            <inertia ixx="1e-3" ixy="0.0" ixz="0.0"
+            iyy="1e-3" iyz="0.0"
+            izz="1e-3" />
+        </inertial>
+    </link>
+
+    <!-- Include macros -->
+    <!-- Franka arm -->
+    <xacro:include filename="$(find franka_description)/urdf/fr3_arm.xacro"/>
+    <xacro:fr3_arm arm_id="$(arg arm_id)" sim_ignition="$(arg sim_ignition)" connected_to="base" xyz="0 0 1" safety_distance="0.03"/>
+    <!-- FR3 gripper -->
+    <xacro:include filename="$(find franka_description)/urdf/hand.xacro"/>
+    <xacro:hand sim_ignition="$(arg sim_ignition)" ns="$(arg arm_id)" rpy="0 0 ${-pi/4}" connected_to="$(arg arm_id)_link8" safety_distance="0.03" />
+    <!-- Import control_xacro -->
+    <xacro:include filename="$(find franka_gripper_moveit)/config/fr3.ros2_control.xacro"/>
+    <xacro:fr3_ros2_control name="fr3_ros2_controller" initial_positions_file="$(arg initial_positions_file)" />
+
+    <!-- Gazebo plugins -->
+    <xacro:if value="$(arg sim_ignition)">
+    <!-- ROS2 control plugin -->
+        <gazebo>
+            <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+                <robot_param>robot_description</robot_param>
+                <robot_param_node>robot_state_publisher</robot_param_node>
+                <parameters>$(find franka_gripper_moveit)/config/ros2_controllers.yaml</parameters>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+</robot>

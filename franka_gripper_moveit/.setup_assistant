@@ -1,0 +1,26 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: franka_description
+    relative_path: urdf/effort_fr3_arm.urdf.xacro
+    xacro_args: end_effector:=gripper sim_ignition:=true
+  srdf:
+    relative_path: config/fr3.srdf
+  package_settings:
+    author_name: Juuso Järvenpää
+    author_email: juuso.s.jarvenpaa@tuni.fi
+    generated_timestamp: 1787324438
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

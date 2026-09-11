@@ -3,61 +3,23 @@
  <tabbed_widget name="Main Window" parent="main_window">
   <Tab containers="1" tab_name="tab1">
    <Container>
-    <DockSplitter count="7" orientation="-" sizes="0.142445;0.143407;0.142445;0.143407;0.142445;0.143407;0.142445">
+    <DockSplitter count="2" orientation="-" sizes="0.500703;0.499297">
      <DockArea name="...">
       <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="-0.731392" left="11.025366" right="16.025032" top="0.009710"/>
+       <range bottom="0.098892" left="10.472082" right="15.462914" top="0.247048"/>
        <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint1/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[0]"/>
+       <curve color="#1f77b4" name="/sensor_joint/force_torque/wrench/force/x"/>
+       <curve color="#d62728" name="/sensor_joint/force_torque/wrench/force/y"/>
+       <curve color="#1ac938" name="/sensor_joint/force_torque/wrench/force/z"/>
       </plot>
      </DockArea>
      <DockArea name="...">
       <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="0.089886" left="11.025366" right="16.025032" top="0.124193"/>
+       <range bottom="-0.011945" left="10.472082" right="15.462914" top="0.007324"/>
        <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint2/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[1]"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="0.091928" left="11.025366" right="16.025032" top="0.668985"/>
-       <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint3/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[2]"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="-1.831636" left="11.025366" right="16.025032" top="-1.598247"/>
-       <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint4/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[3]"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="2.839987" left="11.025366" right="16.025032" top="3.827141"/>
-       <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint5/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[4]"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="2.789465" left="11.025366" right="16.025032" top="2.988295"/>
-       <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint6/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[5]"/>
-      </plot>
-     </DockArea>
-     <DockArea name="...">
-      <plot flip_x="false" flip_y="false" line_width="1.0" mode="TimeSeries">
-       <range bottom="-3.832884" left="11.025366" right="16.025032" top="-2.752753"/>
-       <limitY/>
-       <curve color="#0000ff" name="/joint_states/fr3_joint7/position"/>
-       <curve color="#00ff00" name="/trajectory_point/positions[6]"/>
+       <curve color="#ff7f0e" name="/sensor_joint/force_torque/wrench/torque/x"/>
+       <curve color="#f14cc1" name="/sensor_joint/force_torque/wrench/torque/y"/>
+       <curve color="#9467bd" name="/sensor_joint/force_torque/wrench/torque/z"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -99,7 +61,7 @@
    <max_array_size value="100"/>
    <boolean_strings_to_number value="true"/>
    <remove_suffix_from_strings value="true"/>
-   <selected_topics value="/joint_states;/trajectory_point"/>
+   <selected_topics value="/sensor_joint/force_torque"/>
   </plugin>
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>

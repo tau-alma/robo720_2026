@@ -90,11 +90,6 @@ def launch_setup(context, *args, **kwargs):
     )
     nodes_to_start.append(robot_state_publisher)
 
-    ###################################################################
-    # If we were not using Gazebo ROS2 control plugin, here we would  #
-    # launch a controller_manager node separately, before controllers #
-    ###################################################################
-
     # Controller nodes (joint state broadcaster is part of ros2 control)
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",

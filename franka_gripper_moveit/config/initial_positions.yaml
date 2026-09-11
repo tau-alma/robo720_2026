@@ -1,0 +1,11 @@
+# Default initial positions for fr3's ros2_control fake system
+
+initial_positions:
+  fr3_finger_joint1: 0
+  fr3_joint1: 0.0
+  fr3_joint2: 0.2
+  fr3_joint3: 0.0
+  fr3_joint4: -1.2
+  fr3_joint5: 0.2
+  fr3_joint6: 2.3
+  fr3_joint7: 0.8
