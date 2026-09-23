@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
 #include <trajectory_msgs/msg/joint_trajectory_point.hpp>
 #include <kdl/chain.hpp>
@@ -43,7 +44,9 @@ class TrajectoryPublisher : public rclcpp::Node
         // Publisher
         rclcpp::TimerBase::SharedPtr timer_;
         rclcpp::Publisher<trajectory_msgs::msg::JointTrajectoryPoint>::SharedPtr trajectory_point_publisher_;
+        rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr goal_pose_publisher_;
         trajectory_msgs::msg::JointTrajectoryPoint trajectory_point_msg_;
+        geometry_msgs::msg::PoseStamped goal_pose_msg_;
         void timer_callback();
 
         // Move the end effector in a straight line along y axis.
