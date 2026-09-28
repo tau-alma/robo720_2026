@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<library path="ex3">
+  <class name="ex3/JointController"
+         type="ex3::JointController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      The joint controller follows given joint position trajectory.
+    </description>
+  </class>
+</library>
