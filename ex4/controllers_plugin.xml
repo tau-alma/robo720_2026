@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<library path="ex4">
+  <class name="ex4/GCPDController"
+         type="ex4::GCPDController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Go-to-pose gravity compensated PD controller.
+    </description>
+  </class>
+  <class name="ex4/JointVelocityController"
+         type="ex4::JointVelocityController"
+         base_class_type="controller_interface::ChainableControllerInterface">
+    <description>
+      Low-level joint velocity controller. Takes desired velocity and converts it
+      into torque command.
+    </description>
+  </class>
+  <class name="ex4/JointSpaceKinematicController"
+         type="ex4::JointSpaceKinematicController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Kinematic controller in joint space. Sends velocity command for low-level
+      joint velocity controller.
+    </description>
+  </class>
+  <class name="ex4/TaskSpaceKinematicController"
+         type="ex4::TaskSpaceKinematicController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Kinematic controller in task space. Sends velocity command for low-level
+      joint velocity controller.
+    </description>
+  </class>
+</library>

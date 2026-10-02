@@ -1,0 +1,130 @@
+# controller_manager provides the necessary infrastructure to manage multiple controllers efficiently and robustly using ROS 2 Control.
+controller_manager:
+  ros__parameters:
+    update_rate: 1000 # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    gc_pd_controller:
+      type: ex4/GCPDController
+
+    joint_velocity_controller:
+      type: ex4/JointVelocityController
+
+    joint_space_kinematic_controller:
+      type: ex4/JointSpaceKinematicController
+
+    task_space_kinematic_controller:
+      type: ex4/TaskSpaceKinematicController
+
+/**: # Wildcard entry, multiple nodes can read the parameters under this header, regardless of their name
+  ros__parameters:
+    root_link: "base"
+    tip_link: "fr3_link8"  # we set tip_link to the final link of the arm so that the
+                             # the control is w.r.t. that
+
+gc_pd_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    p_gains:  # w_c = 4.0
+      - 16.0
+      - 16.0
+      - 16.0
+      - 16.0
+      - 16.0
+      - 16.0
+      - 16.0
+    d_gains:  # zeta = 1.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+
+joint_velocity_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    reference_interfaces:
+      - velocity
+    d_gains:  # w_c = 4.0, zeta = 1.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+      - 8.0
+
+joint_space_kinematic_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    following_controller: "joint_velocity_controller"
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+    p_gains:  # Due to cascaded controller, we have Kd * Kp = w_c^2
+      - 2.0   # We get w_c = 4.0 when K_p = 2.0 and K_d = 8.0
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
+
+task_space_kinematic_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    following_controller: "joint_velocity_controller"
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+    p_gains:
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
+      - 2.0
