@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<library path="ex5">
+  <class name="ex5/VisualController"
+         type="ex5::VisualController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Position-based visual servoing controller.
+    </description>
+  </class>
+</library>

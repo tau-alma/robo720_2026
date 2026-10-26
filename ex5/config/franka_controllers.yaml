@@ -1,0 +1,44 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000 # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    visual_controller:
+      type: ex5/VisualController
+
+
+visual_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    root_link: "fr3_link0"
+    tip_link: "fr3_link8"
+    optical_link: "fr3_camera_link_optical"
+    p_gains:
+      - 1.4
+      - 1.4
+      - 1.4
+      - 1.4
+      - 1.4
+      - 1.4
+    d_gains:
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0 
