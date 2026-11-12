@@ -90,6 +90,13 @@ int Solver::compute_jac(const KDL::JntArray& q, KDL::Jacobian& jac, const int& s
     return ret;
 }
 
+int Solver::compute_jac_dot(const KDL::JntArray& q, const KDL::JntArray& q_dot, KDL::Jacobian& jac_dot) {
+    KDL::JntArrayVel qq_dot(q, q_dot);
+    int ret = jac_dot_solver_->JntToJacDot(qq_dot, jac_dot);
+
+    return ret;
+}
+
 void Solver::get_damped_pseudo_inverse(const Eigen::Matrix<double, 6, NUM_JOINTS>& jac,
                                        Eigen::Matrix<double, NUM_JOINTS, 6>& jac_pinv) {
     const Eigen::MatrixXd I6 = Eigen::MatrixXd::Identity(6, 6);

@@ -41,6 +41,7 @@ class Solver {
             KDL::JntSpaceInertiaMatrix& M, KDL::JntArray& G, KDL::JntArray& C);
 
         int compute_jac(const KDL::JntArray& q, KDL::Jacobian& jac, const int& seg_nr=-1);
+        int compute_jac_dot(const KDL::JntArray& q, const KDL::JntArray& q_dot, KDL::Jacobian& jac_dot);
 
         void get_damped_pseudo_inverse(const Eigen::Matrix<double, 6, NUM_JOINTS>& jac,
             Eigen::Matrix<double, NUM_JOINTS, 6>& jac_pinv);

@@ -1,0 +1,92 @@
+# controller_manager provides the necessary infrastructure to manage multiple controllers efficiently and robustly using ROS 2 Control.
+controller_manager:
+  ros__parameters:
+    update_rate: 1000 # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    pf_velocity_controller:
+      type: ex6/PFVelocityController
+
+    pf_effort_controller:
+      type: ex6/PFEffortController
+
+pf_velocity_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    root_link: "base"
+    tip_link: "fr3_link8"
+    p_gains:
+      - 1.5
+      - 1.5
+      - 1.5
+      - 1.5
+      - 1.5
+      - 1.5
+    d_gains:
+      - 7.0
+      - 7.0
+      - 7.0
+      - 7.0
+      - 7.0
+      - 7.0
+      - 7.0
+    k_repulsive: 3.5
+    Q_joint: 0.5 # this will be squared
+    Q_ee: 0.2    # as well as this
+
+pf_effort_controller:
+  ros__parameters:
+    joints:
+      - fr3_joint1
+      - fr3_joint2
+      - fr3_joint3
+      - fr3_joint4
+      - fr3_joint5
+      - fr3_joint6
+      - fr3_joint7
+    command_interfaces:
+      - effort
+    state_interfaces:
+      - position
+      - velocity
+    root_link: "base"
+    tip_link: "fr3_link8"
+    p_gains:
+      - 25.0
+      - 25.0
+      - 25.0
+      - 25.0
+      - 25.0
+      - 25.0
+    d_gains:
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+      - 10.0
+    b_damping:
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+    k_repulsive: 3.5
+    Q_joint: 0.5 # this will be squared
+    Q_ee: 0.2    # as well as this
